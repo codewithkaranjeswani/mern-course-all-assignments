@@ -45,9 +45,29 @@ const path = require("path");
 const fs = require("fs");
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 const todosFilePath = path.join(__dirname, "files", "todos.json");
+
+function logger(req, res, next) {
+  const dt = new Date().toLocaleString("en-IN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+  console.log(`dt = ${dt}, req.method = ${req.method}, req.url = ${req.url}`);
+  // console.log("req.headers", req.headers);
+  // console.log(`req.params = ${JSON.stringify(req.params)}, req.query = ${JSON.stringify(req.query)}`);
+  // console.log("req.body", req.body);
+  next();
+}
+app.use(logger);
 
 app.get("/todos", (req, res) => {
   fs.readFile(todosFilePath, (err, data) => {
@@ -86,7 +106,7 @@ app.post("/todos", (req, res) => {
         return res.status(500).send("Error in writing file");
       }
       console.log("File written successfully");
-      return res.status(201).send({ id: todoId });
+      return res.status(201).send(todo);
     });
   });
 });
@@ -187,14 +207,14 @@ app.delete("/todos/:id", (req, res) => {
           return res.status(500).send("Error in writing file");
         }
         console.log("File written successfully");
-        return res.status(200).send("OK");
+        return res.status(200).send("OKY");
       });
     }
   });
 });
 
-// app.listen(PORT, () => {
-//   console.log(`Example app listening on port ${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}`);
+});
 
-module.exports = app;
+// module.exports = app;
