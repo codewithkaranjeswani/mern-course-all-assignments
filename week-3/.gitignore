@@ -2,3 +2,4 @@
 .env.*
 pass.*
 */data/
+.env
