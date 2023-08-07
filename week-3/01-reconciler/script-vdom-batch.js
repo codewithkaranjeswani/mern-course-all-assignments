@@ -77,7 +77,7 @@ window.setInterval(() => {
     }
   
     updateVirtualDom(todos);
-  }, 5000);
+  }, 1);
 
 window.setInterval(() => {
     createDomElements();
